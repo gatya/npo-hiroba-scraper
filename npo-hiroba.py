@@ -17,13 +17,18 @@ soup = BeautifulSoup(response.content, "html.parser")
 try:
     num_pages = re.compile('\d+').search(soup.find('a',{'title' : "last page"}).string).group()
 except Exception:
-    num_pages = 1
+    try:
+        num_pages = int(soup.find('a',{'title' : "page 2"}).string)
+    except Exception:
+        num_pages = 1
 
 print( str(num_pages) + ' page(s) found!')
     
 for i in tqdm.tqdm(range(num_pages), ascii=True, desc="Scraping search result"):
-    url = urllib.parse.urljoin(url, 'result.php?c=search&WORD=' + str(query) + '&page=' + str(num_pages) )
-    response = requests.get(url)
+    url = urllib.parse.urljoin(url, 'result.php?c=search&WORD=' + str(query) )
+    response = requests.post(url, data=dict(
+    WORD= str(query),
+    page= str(i+1) ))
     soup = BeautifulSoup(response.content, "html.parser")
     length = len(npo.index)
     for idx, link in enumerate(soup.find_all('table')[1].find_all("a", {"href": re.compile(r'zoom.php.*')})):
