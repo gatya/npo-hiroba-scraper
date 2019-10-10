@@ -15,7 +15,7 @@ urlmax = urllib.parse.urljoin(url, 'result.php?c=search&WORD=' + str(query) )
 response = requests.get(urlmax)
 soup = BeautifulSoup(response.content, "html.parser")
 try:
-    num_pages = re.compile('\d+').search(soup.find('a',{'title' : "last page"}).string).group()
+    num_pages = int(re.compile('\d+').search(soup.find('a',{'title' : "last page"}).string).group())
 except Exception:
     try:
         num_pages = int(soup.find('a',{'title' : "page 2"}).string)
