@@ -117,5 +117,5 @@ for index, row in tqdm.tqdm(npo.iterrows(), ascii=True, desc="Scraping NPO profi
     except Exception:
         npo.at[row.name, '活動キーワード'] = 'NA'  
 
-npo.to_csv(file_name + '.csv', encoding='utf-8')
+npo.to_csv(file_name + '.csv', encoding='utf_8_sig')
 print('Finished!')
